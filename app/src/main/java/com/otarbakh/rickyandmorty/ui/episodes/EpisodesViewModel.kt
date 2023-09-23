@@ -5,16 +5,17 @@ import androidx.lifecycle.viewModelScope
 import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.data.model.characters.CharactersDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
-import com.otarbakh.rickyandmorty.domain.use_case.CharactersUseCase
+
 import com.otarbakh.rickyandmorty.domain.use_case.EpisodesUseCase
 import dagger.hilt.android.HiltAndroidApp
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
-@HiltAndroidApp
+@HiltViewModel
 class EpisodesViewModel @Inject constructor(
     private val episodesUseCase: EpisodesUseCase
 ) : ViewModel() {
