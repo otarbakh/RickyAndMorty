@@ -32,6 +32,7 @@ class CharactersFragment :
             charactersVm.getCharacters()
             charactersVm.state.collectLatest {
                 Log.d("FormulaWarmateba", it.toString())
+                charactersAdapter.submitData(it)
             }
         }
     }
