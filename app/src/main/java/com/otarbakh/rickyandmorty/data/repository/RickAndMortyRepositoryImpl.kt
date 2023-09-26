@@ -1,13 +1,13 @@
 package com.otarbakh.rickyandmorty.data.repository
 
 import android.util.Log
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.otarbakh.rickyandmorty.common.Constants
 import com.otarbakh.rickyandmorty.common.Resource
-import com.otarbakh.rickyandmorty.data.model.characters.CharactersDto
-import com.otarbakh.rickyandmorty.data.model.characters.Result
+import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
+import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
@@ -18,12 +18,16 @@ import retrofit2.HttpException
 import javax.inject.Inject
 
 class RickAndMortyRepositoryImpl @Inject constructor(
-    private val rickyAndMortyService: RickyAndMortyService
+    private val rickyAndMortyService: RickyAndMortyService,
+    private val rickAndMortyDao: RickAndMortyDao
 ) : RickAndMortyRepository {
-    override suspend fun getCharacters(): Flow<PagingData<Result>> {
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun getCharacters(): Flow<PagingData<CharactersEntity>> {
+        val pagingSourceFactory = {rickAndMortyDao.getCharacters()}
         return Pager(
             config = PagingConfig(pageSize = 25),
-            pagingSourceFactory = { CharactersDataSource(rickyAndMortyService) }
+            pagingSourceFactory = pagingSourceFactory,
+            remoteMediator = CharactersRemoteMediator(rickyAndMortyService,rickAndMortyDao)
         ).flow
     }
 

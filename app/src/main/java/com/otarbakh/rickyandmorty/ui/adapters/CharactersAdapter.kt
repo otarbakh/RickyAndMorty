@@ -6,17 +6,17 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.otarbakh.rickyandmorty.data.model.characters.Result
+import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.databinding.SingleCharacterLayoutBinding
 
 class CharactersAdapter :
-    PagingDataAdapter<Result, CharactersAdapter.PlayersViewHolder>(
+    PagingDataAdapter<CharactersEntity, CharactersAdapter.PlayersViewHolder>(
         PlayersDiffCallback()
     ) {
 
 
-    private lateinit var itemGotoLinkClickListener: (Result, Int) -> Unit
-    private lateinit var itemShareClickListener: (Result, Int) -> Unit
+    private lateinit var itemGotoLinkClickListener: (CharactersEntity, Int) -> Unit
+    private lateinit var itemShareClickListener: (CharactersEntity, Int) -> Unit
 
     override fun onBindViewHolder(holder: PlayersViewHolder, position: Int) {
 
@@ -40,7 +40,7 @@ class CharactersAdapter :
         private val binding: SingleCharacterLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(data: Result?) {
+        fun bind(data: CharactersEntity?) {
 
             binding.apply {
                 tvNewsText.text = data?.name
@@ -66,23 +66,23 @@ class CharactersAdapter :
 
     }
 
-    fun setOnGotoClickListener(clickListener: (Result, Int) -> Unit) {
+    fun setOnGotoClickListener(clickListener: (CharactersEntity, Int) -> Unit) {
         itemGotoLinkClickListener = clickListener
     }
 
-    fun setOnShareClickListener(clickListener: (Result, Int) -> Unit) {
+    fun setOnShareClickListener(clickListener: (CharactersEntity, Int) -> Unit) {
         itemShareClickListener = clickListener
     }
 
 
 
 
-    private class PlayersDiffCallback : DiffUtil.ItemCallback<Result>() {
-        override fun areItemsTheSame(oldItem: Result, newItem: Result): Boolean {
+    private class PlayersDiffCallback : DiffUtil.ItemCallback<CharactersEntity>() {
+        override fun areItemsTheSame(oldItem: CharactersEntity, newItem: CharactersEntity): Boolean {
             return oldItem.id == newItem.id
         }
 
-        override fun areContentsTheSame(oldItem: Result, newItem: Result): Boolean {
+        override fun areContentsTheSame(oldItem: CharactersEntity, newItem: CharactersEntity): Boolean {
             return oldItem == newItem
         }
     }

@@ -38,7 +38,7 @@ class CharactersFragment :
         }
     }
     private fun setupRecycler() {
-        binding.rvBreakingNews.apply {
+        binding.rvCharacters.apply {
             adapter = charactersAdapter
             layoutManager = GridLayoutManager(
                 requireContext(),
