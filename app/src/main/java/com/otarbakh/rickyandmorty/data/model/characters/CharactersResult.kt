@@ -2,7 +2,8 @@ package com.otarbakh.rickyandmorty.data.model.characters
 
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 
-data class Result(
+
+data class CharactersResult(
     val created: String?,
     val episode: List<String?>?,
     val gender: String?,
@@ -16,7 +17,7 @@ data class Result(
     val type: String?,
     val url: String?
 )
-fun Result.toCharacter(): CharactersEntity {
+fun CharactersResult.toCharacter(): CharactersEntity {
     return CharactersEntity(
         gender, id, image, name
     )

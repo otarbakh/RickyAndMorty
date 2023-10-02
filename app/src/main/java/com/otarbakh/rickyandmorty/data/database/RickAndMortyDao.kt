@@ -8,6 +8,8 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
+import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
+import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
 
 @Dao
 interface RickAndMortyDao {
@@ -25,7 +27,13 @@ interface RickAndMortyDao {
     fun insert(character: CharactersEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(characters: List<CharactersEntity>)
+    suspend fun insertAllCharacters(characters: List<CharactersEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllEpisodes(characters: List<EpisodesEntity>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAllLocations(characters: List<LocationsEntity>)
 
     @Delete
     fun delete(character: CharactersEntity)

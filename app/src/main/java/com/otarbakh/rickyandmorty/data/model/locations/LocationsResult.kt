@@ -1,6 +1,6 @@
 package com.otarbakh.rickyandmorty.data.model.locations
 
-data class Result(
+data class LocationsResult(
     val created: String?,
     val dimension: String?,
     val id: Int?,

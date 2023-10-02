@@ -8,14 +8,16 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
+import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.model.characters.toCharacter
+import com.otarbakh.rickyandmorty.data.model.episodes.toEpisodes
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
 
 @OptIn(ExperimentalPagingApi::class)
-class CharactersRemoteMediator(
+class EpisodesRemoteMediator(
     private val apiService: RickyAndMortyService,
     private val rickyAndMortyDao: RickAndMortyDao,
-) : RemoteMediator<Int, CharactersEntity>() {
+) : RemoteMediator<Int, EpisodesEntity>() {
 
 
     private var nextPageNumber:Int? = 1
@@ -23,7 +25,7 @@ class CharactersRemoteMediator(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, CharactersEntity>,
+        state: PagingState<Int, EpisodesEntity>,
     ): MediatorResult {
         return try {
             val loadKey = when (loadType) {
@@ -34,14 +36,14 @@ class CharactersRemoteMediator(
                 LoadType.APPEND -> nextPageNumber
             }
 
-            val response = apiService.fetchCharacters(loadKey)
+            val response = apiService.fetchEpisodes(loadKey)
 
             Log.d("kerdzobina",nextPageNumber.toString())
 
             val uri = Uri.parse(response.body()!!.info?.next)
             val nextPageQuery = uri.getQueryParameter("page")
 
-            rickyAndMortyDao.insertAllCharacters(response.body()!!.results.map { it.toCharacter() })
+            rickyAndMortyDao.insertAllEpisodes(response.body()!!.results!!.map { it!!.toEpisodes() })
 
             nextPageNumber = nextPageQuery?.toInt()!!
 
@@ -50,4 +52,5 @@ class CharactersRemoteMediator(
             MediatorResult.Error(e)
         }
     }
+
 }

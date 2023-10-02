@@ -16,10 +16,12 @@ interface RickyAndMortyService {
 
     @GET("location")
     suspend fun fetchLocations(
+        @Query("page") page: Int? = null
     ): Response<LocationsDto>
 
     @GET("episode")
     suspend fun fetchEpisodes(
+        @Query("page") page: Int? = null
     ): Response<EpisodesDto>
 
 }

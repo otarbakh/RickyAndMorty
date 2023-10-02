@@ -3,13 +3,11 @@ package com.otarbakh.rickyandmorty.data.database.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "characters")
-data class CharactersEntity(
+@Entity(tableName = "locations")
+data class LocationsEntity(
     val gender: String?,
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey(false)
     val id: Int?,
+    val image: String?,
     val name: String?,
-    val image: String?
 )
-
-
