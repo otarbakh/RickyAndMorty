@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 
-import com.otarbakh.rickyandmorty.databinding.SingleCharacterLayoutBinding
+import com.otarbakh.rickyandmorty.databinding.SingleEpisodesLayoutBinding
 
 class EpisodesAdapter :
     PagingDataAdapter<EpisodesEntity, EpisodesAdapter.EpisodesViewHolder>(
@@ -28,9 +28,8 @@ class EpisodesAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EpisodesViewHolder {
-
         return EpisodesViewHolder(
-            SingleCharacterLayoutBinding.inflate(
+            SingleEpisodesLayoutBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
         )
@@ -38,28 +37,29 @@ class EpisodesAdapter :
     }
 
     inner class EpisodesViewHolder(
-        private val binding: SingleCharacterLayoutBinding
+        private val binding: SingleEpisodesLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(data: EpisodesEntity?) {
 
             binding.apply {
-                tvNewsText.text = data?.name
-                tvDesription.text = data?.gender
+                tvSeason.text = data?.episode
+                tvEpisodeName.text = data?.name
+                tvReleaseDate.text = data?.air_date
 
 
 
-                binding.ivNewsImage.setOnClickListener {
-                    itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
-                }
+//                binding.ivNewsImage.setOnClickListener {
+//                    itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
+//                }
 
-                binding.btnShare.setOnClickListener {
-                    itemShareClickListener.invoke(data!!, absoluteAdapterPosition)
-                }
+//                binding.btnShare.setOnClickListener {
+//                    itemShareClickListener.invoke(data!!, absoluteAdapterPosition)
+//                }
 
-                Glide.with(this.ivNewsImage)
-                    .load(data?.image)
-                    .into(ivNewsImage)
+//                Glide.with(this.)
+//                    .load(data?.image)
+//                    .into(ivNewsImage)
             }
 
         }

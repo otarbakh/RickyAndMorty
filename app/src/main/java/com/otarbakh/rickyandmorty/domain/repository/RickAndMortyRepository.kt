@@ -12,7 +12,7 @@ interface RickAndMortyRepository {
 
     suspend fun getCharacters(): Flow<PagingData<CharactersEntity>>
 
-    suspend fun getLocations(): Flow<Resource<LocationsDto>>
+//    suspend fun getLocations(): Flow<Resource<LocationsDto>>
 
     suspend fun getEpisodes(): Flow<PagingData<EpisodesEntity>>
 }

@@ -19,6 +19,6 @@ data class CharactersResult(
 )
 fun CharactersResult.toCharacter(): CharactersEntity {
     return CharactersEntity(
-        gender, id, image, name
+        gender, id, name, image
     )
 }

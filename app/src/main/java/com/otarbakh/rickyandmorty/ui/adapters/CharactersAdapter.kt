@@ -10,7 +10,7 @@ import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.databinding.SingleCharacterLayoutBinding
 
 class CharactersAdapter :
-    PagingDataAdapter<CharactersEntity, CharactersAdapter.PlayersViewHolder>(
+    PagingDataAdapter<CharactersEntity, CharactersAdapter.CharactersVIewHolder>(
         PlayersDiffCallback()
     ) {
 
@@ -18,7 +18,7 @@ class CharactersAdapter :
     private lateinit var itemGotoLinkClickListener: (CharactersEntity, Int) -> Unit
     private lateinit var itemShareClickListener: (CharactersEntity, Int) -> Unit
 
-    override fun onBindViewHolder(holder: PlayersViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CharactersVIewHolder, position: Int) {
 
         val data = getItem(position)
 
@@ -26,9 +26,9 @@ class CharactersAdapter :
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayersViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactersVIewHolder {
 
-        return PlayersViewHolder(
+        return CharactersVIewHolder(
             SingleCharacterLayoutBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false
             )
@@ -36,7 +36,7 @@ class CharactersAdapter :
 
     }
 
-    inner class PlayersViewHolder(
+    inner class CharactersVIewHolder(
         private val binding: SingleCharacterLayoutBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 

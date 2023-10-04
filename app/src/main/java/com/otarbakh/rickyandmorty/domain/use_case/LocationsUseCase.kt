@@ -9,22 +9,22 @@ import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
-class LocationsUseCase @Inject constructor(
-    private val rickAndMortyRepository: RickAndMortyRepository
-) {
-    operator fun invoke(): Flow<Resource<LocationsDto>> = channelFlow {
-        rickAndMortyRepository.getLocations().collectLatest {
-            when(it){
-                is Resource.Success-> {
-                    send(Resource.Success(it.data))
-                }
-                is Resource.Loading-> {
-                    send(Resource.Loading(it.loading))
-                }
-                is Resource.Error-> {
-                    send(Resource.Error(it.error))
-                }
-            }
-        }
-    }
-}
+//class LocationsUseCase @Inject constructor(
+//    private val rickAndMortyRepository: RickAndMortyRepository
+//) {
+//    operator fun invoke(): Flow<Resource<LocationsDto>> = channelFlow {
+//        rickAndMortyRepository.getLocations().collectLatest {
+//            when(it){
+//                is Resource.Success-> {
+//                    send(Resource.Success(it.data))
+//                }
+//                is Resource.Loading-> {
+//                    send(Resource.Loading(it.loading))
+//                }
+//                is Resource.Error-> {
+//                    send(Resource.Error(it.error))
+//                }
+//            }
+//        }
+//    }
+//}

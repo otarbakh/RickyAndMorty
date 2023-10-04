@@ -8,6 +8,8 @@ import androidx.paging.PagingData
 import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
+import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
+import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
@@ -23,53 +25,32 @@ class RickAndMortyRepositoryImpl @Inject constructor(
 ) : RickAndMortyRepository {
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun getCharacters(): Flow<PagingData<CharactersEntity>> {
-        val pagingSourceFactory = {rickAndMortyDao.getCharacters()}
+        val pagingSourceFactory = { rickAndMortyDao.getCharacters() }
         return Pager(
             config = PagingConfig(pageSize = 25),
             pagingSourceFactory = pagingSourceFactory,
-            remoteMediator = CharactersRemoteMediator(rickyAndMortyService,rickAndMortyDao)
+            remoteMediator = CharactersRemoteMediator(rickyAndMortyService, rickAndMortyDao)
         ).flow
     }
 
-    override suspend fun getLocations(): Flow<Resource<LocationsDto>> = flow {
-        try {
-            emit(Resource.Loading(true))
-            val response = rickyAndMortyService.fetchLocations()
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()!!))
+//    override suspend fun getLocations(): Flow<Resource<LocationsEntity>> {
+//        val pagingSourceFactory = { rickAndMortyDao.getEpisodes() }
+//        return Pager(
+//            config = PagingConfig(pageSize = 25),
+//            pagingSourceFactory = pagingSourceFactory,
+//            remoteMediator = EpisodesRemoteMediator(rickyAndMortyService, rickAndMortyDao)
+//        ).flow
+//    }
 
-                Log.d("Jameson", "${response}")
-            } else {
-                Log.d("Jameson", "erorrrrrrrr")
-            }
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.localizedMessage ?: "Ops Erorr"))
-            Log.d("Jameson", "erorr")
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.message()))
-
-            Log.d("Jameson", "eoriraa vaax")
-        }
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun getEpisodes(): Flow<PagingData<EpisodesEntity>> {
+        val pagingSourceFactory = { rickAndMortyDao.getEpisodes() }
+        return Pager(
+            config = PagingConfig(pageSize = 25),
+            pagingSourceFactory = pagingSourceFactory,
+            remoteMediator = EpisodesRemoteMediator(rickyAndMortyService, rickAndMortyDao)
+        ).flow
     }
 
-    override suspend fun getEpisodes(): Flow<Resource<EpisodesDto>> = flow {
-        try {
-            emit(Resource.Loading(true))
-            val response = rickyAndMortyService.fetchEpisodes()
-            if (response.isSuccessful) {
-                emit(Resource.Success(response.body()!!))
-
-                Log.d("Jameson", "${response}")
-            } else {
-                Log.d("Jameson", "erorrrrrrrr")
-            }
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.localizedMessage ?: "Ops Erorr"))
-            Log.d("Jameson", "erorr")
-        } catch (e: HttpException) {
-            emit(Resource.Error(e.message()))
-
-            Log.d("Jameson", "eoriraa vaax")
-        }
-    }
 }
+

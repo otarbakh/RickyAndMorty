@@ -24,9 +24,6 @@ interface RickAndMortyDao {
     fun getLocations(): PagingSource<Int, LocationsEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(character: CharactersEntity)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAllCharacters(characters: List<CharactersEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -47,6 +44,5 @@ interface RickAndMortyDao {
     @Query("DELETE FROM characters")
     fun deleteAll()
 
-    @Query("DELETE FROM characters WHERE id IN (SELECT id FROM characters ORDER BY id DESC LIMIT -1 OFFSET 40)")
-    suspend fun deleteOldEntries()
+
 }
