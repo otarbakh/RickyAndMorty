@@ -21,4 +21,9 @@
         android:name="com.otarbakh.rickyandmorty.ui.episodes.EpisodesFragment"
         android:label="fragment_episodes"
         tools:layout="@layout/fragment_episodes" />
+    <fragment
+        android:id="@+id/singleCharacterFragment"
+        android:name="com.otarbakh.rickyandmorty.ui.singlecharacters.SingleCharacterFragment"
+        android:label="fragment_single_character"
+        tools:layout="@layout/fragment_single_character" />
 </navigation>

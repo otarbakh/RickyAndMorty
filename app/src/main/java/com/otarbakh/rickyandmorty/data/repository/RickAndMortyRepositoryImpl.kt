@@ -10,12 +10,15 @@ import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
+import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
 import com.otarbakh.rickyandmorty.domain.repository.RickAndMortyRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.HttpException
 import javax.inject.Inject
 
@@ -50,6 +53,33 @@ class RickAndMortyRepositoryImpl @Inject constructor(
             pagingSourceFactory = pagingSourceFactory,
             remoteMediator = EpisodesRemoteMediator(rickyAndMortyService, rickAndMortyDao)
         ).flow
+    }
+
+    override suspend fun getSingleCharacter(id:Int): Flow<Resource<SingleCharacterDto>> = flow {
+        emit(Resource.Loading(true))
+        val response = rickyAndMortyService.fetchSingleCharacter()
+        if (response?.isSuccessful!!) {
+            emit(Resource.Success(response.body()!!))
+        } else {
+            val errorBody = response?.errorBody()?.string()
+            val errorMessage = if (errorBody != null) {
+                if (response?.headers()?.get("Content-Type")
+                        ?.contains("application/json") == true
+                ) {
+                    try {
+                        val errorJson = JSONObject(errorBody)
+                        errorJson.getString("message")
+                    } catch (e: JSONException) {
+                        "An error occurred json"
+                    }
+                } else {
+                    "An error occurred outer"
+                }
+            } else {
+                "An error occurred outer"
+            }
+            emit(Resource.Error(errorMessage))
+        }
     }
 
 }

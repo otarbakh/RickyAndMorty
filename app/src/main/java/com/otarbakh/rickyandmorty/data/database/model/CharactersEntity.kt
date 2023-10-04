@@ -9,7 +9,8 @@ data class CharactersEntity(
     @PrimaryKey(autoGenerate = false)
     val id: Int?,
     val name: String?,
-    val image: String?
+    val image: String?,
+    val episode: List<String?>?,
 )
 
 

@@ -1,9 +1,6 @@
-package com.otarbakh.rickyandmorty.data.model.characters
+package com.otarbakh.rickyandmorty.data.model.characters.singlecharacter
 
-import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
-
-
-data class CharactersResult(
+data class SingleCharacterDto(
     val created: String?,
     val episode: List<String?>?,
     val gender: String?,
@@ -17,8 +14,3 @@ data class CharactersResult(
     val type: String?,
     val url: String?
 )
-fun CharactersResult.toCharacter(): CharactersEntity {
-    return CharactersEntity(
-        gender, id, name, image,episode
-    )
-}

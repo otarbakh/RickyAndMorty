@@ -1,6 +1,7 @@
 package com.otarbakh.rickyandmorty.data.service
 
 import com.otarbakh.rickyandmorty.data.model.characters.CharactersDto
+import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import retrofit2.Response
@@ -23,5 +24,10 @@ interface RickyAndMortyService {
     suspend fun fetchEpisodes(
         @Query("page") page: Int? = null
     ): Response<EpisodesDto>
+
+    @GET("character")
+    suspend fun fetchSingleCharacter(
+        @Query("id") id: Int? = null
+    ): Response<SingleCharacterDto>
 
 }
