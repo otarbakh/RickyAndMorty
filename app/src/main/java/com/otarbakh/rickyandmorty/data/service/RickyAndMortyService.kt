@@ -26,9 +26,10 @@ interface RickyAndMortyService {
         @Query("page") page: Int? = null
     ): Response<EpisodesDto>
 
-    @GET("character")
+    @GET("character/{id}")
     suspend fun fetchSingleCharacter(
-        id : Int
+        @Path("id") id: Int
+
     ): Response<SingleCharacterDto>
 
 }
