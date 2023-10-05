@@ -6,6 +6,7 @@ import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface RickyAndMortyService {
@@ -27,7 +28,7 @@ interface RickyAndMortyService {
 
     @GET("character")
     suspend fun fetchSingleCharacter(
-        @Query("id") id: Int? = null
+        id : Int
     ): Response<SingleCharacterDto>
 
 }

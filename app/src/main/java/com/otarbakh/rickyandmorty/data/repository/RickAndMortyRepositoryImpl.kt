@@ -57,10 +57,12 @@ class RickAndMortyRepositoryImpl @Inject constructor(
 
     override suspend fun getSingleCharacter(id:Int): Flow<Resource<SingleCharacterDto>> = flow {
         emit(Resource.Loading(true))
-        val response = rickyAndMortyService.fetchSingleCharacter()
+        val response = rickyAndMortyService.fetchSingleCharacter(id)
         if (response?.isSuccessful!!) {
+            Log.d("MISHA", response.body().toString())
             emit(Resource.Success(response.body()!!))
         } else {
+
             val errorBody = response?.errorBody()?.string()
             val errorMessage = if (errorBody != null) {
                 if (response?.headers()?.get("Content-Type")

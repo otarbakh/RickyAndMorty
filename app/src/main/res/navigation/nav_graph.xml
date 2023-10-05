@@ -10,7 +10,11 @@
         android:id="@+id/charactersFragment"
         android:name="com.otarbakh.rickyandmorty.ui.characters.CharactersFragment"
         android:label="fragment_characters2"
-        tools:layout="@layout/fragment_characters" />
+        tools:layout="@layout/fragment_characters" >
+        <action
+            android:id="@+id/action_charactersFragment_to_singleCharacterFragment"
+            app:destination="@id/singleCharacterFragment" />
+    </fragment>
     <fragment
         android:id="@+id/locationsFragment"
         android:name="com.otarbakh.rickyandmorty.ui.locations.LocationsFragment"
@@ -25,5 +29,9 @@
         android:id="@+id/singleCharacterFragment"
         android:name="com.otarbakh.rickyandmorty.ui.singlecharacters.SingleCharacterFragment"
         android:label="fragment_single_character"
-        tools:layout="@layout/fragment_single_character" />
+        tools:layout="@layout/fragment_single_character" >
+        <argument
+            android:name="characterID"
+            app:argType="integer" />
+    </fragment>
 </navigation>
