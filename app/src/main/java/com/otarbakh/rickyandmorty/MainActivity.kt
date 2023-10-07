@@ -2,6 +2,7 @@ package com.otarbakh.rickyandmorty
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI.setupWithNavController
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        installSplashScreen()
 
         navController = Navigation.findNavController(this,R.id.nav_host_fragment)
         setupWithNavController(binding.bottomNavigationView,navController)
