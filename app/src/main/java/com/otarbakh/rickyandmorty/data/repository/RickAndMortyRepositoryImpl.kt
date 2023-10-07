@@ -12,6 +12,7 @@ import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
 import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
+import com.otarbakh.rickyandmorty.data.model.episodes.multipleepisode.MultipleEpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
 import com.otarbakh.rickyandmorty.domain.repository.RickAndMortyRepository
@@ -58,6 +59,36 @@ class RickAndMortyRepositoryImpl @Inject constructor(
     override suspend fun getSingleCharacter(id:Int): Flow<Resource<SingleCharacterDto>> = flow {
         emit(Resource.Loading(true))
         val response = rickyAndMortyService.fetchSingleCharacter(id)
+        if (response?.isSuccessful!!) {
+            Log.d("MISHA", response.body().toString())
+            emit(Resource.Success(response.body()!!))
+        } else {
+
+            val errorBody = response?.errorBody()?.string()
+            val errorMessage = if (errorBody != null) {
+                if (response?.headers()?.get("Content-Type")
+                        ?.contains("application/json") == true
+                ) {
+                    try {
+                        val errorJson = JSONObject(errorBody)
+                        errorJson.getString("message")
+                    } catch (e: JSONException) {
+                        "An error occurred json"
+                    }
+                } else {
+                    "An error occurred outer"
+                }
+            } else {
+                "An error occurred outer"
+            }
+            emit(Resource.Error(errorMessage))
+        }
+    }
+
+
+    override suspend fun getMultipleEpisodes(ids: List<Int>): Flow<Resource<MultipleEpisodesDto>> = flow {
+        emit(Resource.Loading(true))
+        val response = rickyAndMortyService.fetchSingleCharacter(ids)
         if (response?.isSuccessful!!) {
             Log.d("MISHA", response.body().toString())
             emit(Resource.Success(response.body()!!))

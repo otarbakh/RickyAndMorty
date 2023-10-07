@@ -3,6 +3,7 @@ package com.otarbakh.rickyandmorty.data.service
 import com.otarbakh.rickyandmorty.data.model.characters.CharactersDto
 import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
+import com.otarbakh.rickyandmorty.data.model.episodes.multipleepisode.MultipleEpisodesDto
 import com.otarbakh.rickyandmorty.data.model.locations.LocationsDto
 import retrofit2.Response
 import retrofit2.http.GET
@@ -31,5 +32,11 @@ interface RickyAndMortyService {
         @Path("id") id: Int
 
     ): Response<SingleCharacterDto>
+
+    @GET("episode/{ids}")
+    suspend fun fetchSingleCharacter(
+        @Path("ids") ids: List<Int>
+
+    ): Response<MultipleEpisodesDto>
 
 }

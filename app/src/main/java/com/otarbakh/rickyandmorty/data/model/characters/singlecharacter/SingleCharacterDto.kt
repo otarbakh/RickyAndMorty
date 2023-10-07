@@ -2,7 +2,7 @@ package com.otarbakh.rickyandmorty.data.model.characters.singlecharacter
 
 data class SingleCharacterDto(
     val created: String?,
-    val episode: List<String?>?,
+    val episode: List<String>,
     val gender: String?,
     val id: Int?,
     val image: String?,
