@@ -37,14 +37,15 @@ class RickAndMortyRepositoryImpl @Inject constructor(
         ).flow
     }
 
-//    override suspend fun getLocations(): Flow<Resource<LocationsEntity>> {
-//        val pagingSourceFactory = { rickAndMortyDao.getEpisodes() }
-//        return Pager(
-//            config = PagingConfig(pageSize = 25),
-//            pagingSourceFactory = pagingSourceFactory,
-//            remoteMediator = EpisodesRemoteMediator(rickyAndMortyService, rickAndMortyDao)
-//        ).flow
-//    }
+    @OptIn(ExperimentalPagingApi::class)
+    override suspend fun getLocations(): Flow<PagingData<LocationsEntity>> {
+        val pagingSourceFactory = { rickAndMortyDao.getLocations() }
+        return Pager(
+            config = PagingConfig(pageSize = 25),
+            pagingSourceFactory = pagingSourceFactory,
+            remoteMediator = LocationsRemoteMediator(rickyAndMortyService, rickAndMortyDao)
+        ).flow
+    }
 
     @OptIn(ExperimentalPagingApi::class)
     override suspend fun getEpisodes(): Flow<PagingData<EpisodesEntity>> {
@@ -84,7 +85,6 @@ class RickAndMortyRepositoryImpl @Inject constructor(
             emit(Resource.Error(errorMessage))
         }
     }
-
 
     override suspend fun getMultipleEpisodes(ids: List<Int>): Flow<Resource<MultipleEpisodesDto>> = flow {
         emit(Resource.Loading(true))

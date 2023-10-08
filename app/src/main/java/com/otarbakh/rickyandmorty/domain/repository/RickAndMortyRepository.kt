@@ -4,6 +4,7 @@ import androidx.paging.PagingData
 import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
+import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
 import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.episodes.multipleepisode.MultipleEpisodesDto
@@ -14,7 +15,7 @@ interface RickAndMortyRepository {
 
     suspend fun getCharacters(): Flow<PagingData<CharactersEntity>>
 
-//    suspend fun getLocations(): Flow<Resource<LocationsDto>>
+    suspend fun getLocations(): Flow<PagingData<LocationsEntity>>
 
     suspend fun getEpisodes(): Flow<PagingData<EpisodesEntity>>
 

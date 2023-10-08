@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        installSplashScreen()
 
         navController = Navigation.findNavController(this,R.id.nav_host_fragment)
         setupWithNavController(binding.bottomNavigationView,navController)

@@ -30,6 +30,5 @@ class CharactersViewModel @Inject constructor(
                 _state.value = it
             }
         }
-
     }
 }

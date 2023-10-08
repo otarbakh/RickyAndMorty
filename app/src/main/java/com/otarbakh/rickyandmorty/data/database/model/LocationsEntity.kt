@@ -5,9 +5,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "locations")
 data class LocationsEntity(
-    val gender: String?,
+    val type: String?,
     @PrimaryKey(false)
     val id: Int?,
-    val image: String?,
     val name: String?,
 )

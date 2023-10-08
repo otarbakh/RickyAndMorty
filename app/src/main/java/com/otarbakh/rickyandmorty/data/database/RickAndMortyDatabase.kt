@@ -11,7 +11,7 @@ import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
         CharactersEntity::class,
         LocationsEntity::class,
         EpisodesEntity::class
-    ], version = 2
+    ], version = 3
 )
 abstract class RickAndMortyDatabase : RoomDatabase() {
     abstract val charactersDao: RickAndMortyDao
