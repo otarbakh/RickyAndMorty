@@ -17,6 +17,11 @@ interface RickyAndMortyService {
         @Query("page") page: Int? = null
     ): Response<CharactersDto>
 
+    @GET("character")
+    suspend fun fetchSearchedCharacters(
+        @Query("name") name: String? = null
+    ): Response<CharactersDto>
+
     @GET("location")
     suspend fun fetchLocations(
         @Query("page") page: Int? = null

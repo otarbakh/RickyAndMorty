@@ -5,6 +5,7 @@ import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
+import com.otarbakh.rickyandmorty.data.model.characters.CharactersResult
 import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.episodes.multipleepisode.MultipleEpisodesDto
@@ -22,4 +23,6 @@ interface RickAndMortyRepository {
     suspend fun getSingleCharacter(id: Int): Flow<Resource<SingleCharacterDto>>
 
     suspend fun getMultipleEpisodes(ids: List<Int>): Flow<Resource<MultipleEpisodesDto>>
+
+    suspend fun getSearchedCharacters(name:String): Flow<Resource<List<CharactersResult>>>
 }

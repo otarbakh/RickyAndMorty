@@ -38,12 +38,12 @@ class LocationsRemoteMediator(
 
             val response = apiService.fetchLocations(loadKey)
 
-            Log.d("kerdzobina",nextPageNumber.toString())
+            Log.d("AmerikisPrezidenti",response.body()!!.results.toString())
 
             val uri = Uri.parse(response.body()!!.info?.next)
             val nextPageQuery = uri.getQueryParameter("page")
 
-            rickyAndMortyDao.insertAllLocations(response.body()!!.locationsResults.map { it.toLocation() })
+            rickyAndMortyDao.insertAllLocations(response.body()!!.results.map { it.toLocation() })
 
             nextPageNumber = nextPageQuery?.toInt()!!
 

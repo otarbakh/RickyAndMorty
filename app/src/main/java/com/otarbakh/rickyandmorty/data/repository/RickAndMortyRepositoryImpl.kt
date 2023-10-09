@@ -10,6 +10,7 @@ import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
+import com.otarbakh.rickyandmorty.data.model.characters.CharactersResult
 import com.otarbakh.rickyandmorty.data.model.characters.singlecharacter.SingleCharacterDto
 import com.otarbakh.rickyandmorty.data.model.episodes.EpisodesDto
 import com.otarbakh.rickyandmorty.data.model.episodes.multipleepisode.MultipleEpisodesDto
@@ -92,6 +93,36 @@ class RickAndMortyRepositoryImpl @Inject constructor(
         if (response?.isSuccessful!!) {
             Log.d("MISHA", response.body().toString())
             emit(Resource.Success(response.body()!!))
+        } else {
+
+            val errorBody = response?.errorBody()?.string()
+            val errorMessage = if (errorBody != null) {
+                if (response?.headers()?.get("Content-Type")
+                        ?.contains("application/json") == true
+                ) {
+                    try {
+                        val errorJson = JSONObject(errorBody)
+                        errorJson.getString("message")
+                    } catch (e: JSONException) {
+                        "An error occurred json"
+                    }
+                } else {
+                    "An error occurred outer"
+                }
+            } else {
+                "An error occurred outer"
+            }
+            emit(Resource.Error(errorMessage))
+        }
+    }
+
+
+    override suspend fun getSearchedCharacters(name:String): Flow<Resource<List<CharactersResult>>> = flow {
+        emit(Resource.Loading(true))
+        val response = rickyAndMortyService.fetchSearchedCharacters(name)
+        if (response?.isSuccessful!!) {
+            Log.d("MISHA", response.body().toString())
+            emit(Resource.Success(response.body()!!.results))
         } else {
 
             val errorBody = response?.errorBody()?.string()
