@@ -25,7 +25,9 @@ class LocationsFragment :
             locationsVm.getLocations()
             locationsVm.state.collectLatest {
                 Log.d("FormulaWarmateba", it.toString())
-                locationAdapter.submitData(it)
+                if (it != null) {
+                    locationAdapter.submitData(it)
+                }
             }
         }
     }

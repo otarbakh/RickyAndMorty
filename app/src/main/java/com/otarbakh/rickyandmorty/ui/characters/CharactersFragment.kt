@@ -38,7 +38,9 @@ class CharactersFragment :
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 charactersVm.getCharacters()
                 charactersVm.state.collectLatest {
-                    charactersAdapter.submitData(it)
+                    if (it != null) {
+                        charactersAdapter.submitData(it)
+                    }
                 }
             }
         }
@@ -61,7 +63,9 @@ class CharactersFragment :
                         viewLifecycleOwner.lifecycleScope.launch {
                             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 charactersVm.state.collectLatest {
-                                    charactersAdapter.submitData(it)
+                                    if (it != null) {
+                                        charactersAdapter.submitData(it)
+                                    }
                                 }
                             }
                         }
@@ -82,7 +86,9 @@ class CharactersFragment :
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         charactersVm.state.collectLatest {
-                            charactersAdapter.submitData(it)
+                            if (it != null) {
+                                charactersAdapter.submitData(it)
+                            }
                         }
                     }
                 }

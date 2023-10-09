@@ -33,7 +33,9 @@ class EpisodesFragment : BaseFragment<FragmentEpisodesBinding>(FragmentEpisodesB
             episodesVm.getEpisodes()
             episodesVm.state.collectLatest {
                 Log.d("FormulaWarmateba", it.toString())
-                episodeAdapter.submitData(it)
+                if (it != null) {
+                    episodeAdapter.submitData(it)
+                }
             }
         }
     }
