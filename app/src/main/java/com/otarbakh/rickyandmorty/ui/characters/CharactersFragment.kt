@@ -18,6 +18,7 @@ import com.otarbakh.rickyandmorty.ui.adapters.SearchedCharactersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.util.Collections
 
 @AndroidEntryPoint
 class CharactersFragment :
@@ -32,8 +33,11 @@ class CharactersFragment :
     override fun viewCreated() {
         setupRecycler()
         setupSearchRecycler()
-        loadingIndicator = binding.loadingIndicator
+        refreshCharacters()
+        refreshSearchedCharacters()
 
+
+        loadingIndicator = binding.loadingIndicator
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 charactersVm.getCharacters()
@@ -44,6 +48,7 @@ class CharactersFragment :
                 }
             }
         }
+
 
 
 
@@ -59,7 +64,9 @@ class CharactersFragment :
                 override fun onQueryTextChange(newText: String?): Boolean {
                     if(newText.isNullOrEmpty() && newText.isNullOrBlank()){
                         binding.rvSearchCharacters.visibility = View.INVISIBLE
+                        binding.layoutRvSeachedCharacters.visibility = View.INVISIBLE
                         binding.rvCharacters.visibility = View.VISIBLE
+                        binding.layoutCharacters.visibility = View.VISIBLE
                         viewLifecycleOwner.lifecycleScope.launch {
                             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 charactersVm.state.collectLatest {
@@ -72,8 +79,10 @@ class CharactersFragment :
                     }
                     if(!newText.isNullOrEmpty()){
                         binding.rvSearchCharacters.visibility = View.VISIBLE
+                        binding.layoutRvSeachedCharacters.visibility = View.VISIBLE
                         binding.rvCharacters.visibility = View.INVISIBLE
-                        observe()
+                        binding.layoutCharacters.visibility = View.INVISIBLE
+                        refreshSearchedCharacters()
                     }
                     charactersVm.setSearchQuery(newText.orEmpty())
                     return true
@@ -82,7 +91,9 @@ class CharactersFragment :
 
             binding.etSearch.setOnCloseListener {
                 binding.rvSearchCharacters.visibility = View.INVISIBLE
+                binding.layoutRvSeachedCharacters.visibility = View.INVISIBLE
                 binding.rvCharacters.visibility = View.VISIBLE
+                binding.layoutCharacters.visibility = View.VISIBLE
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         charactersVm.state.collectLatest {
@@ -135,21 +146,41 @@ class CharactersFragment :
         }
     }
 
-    private fun observe(){
-        viewLifecycleOwner.lifecycleScope.launch {
-            charactersVm.searchResults.collect { resource ->
-                when (resource) {
-                    is Resource.Loading -> {
-                        loadingIndicator.visibility = View.VISIBLE
+    fun refreshCharacters(){
+        binding.layoutCharacters.setOnRefreshListener {
+            binding.layoutCharacters.isRefreshing = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    charactersVm.getCharacters()
+                    charactersVm.state.collectLatest {
+                        if (it != null) {
+                            charactersAdapter.submitData(it)
+                        }
                     }
-                    is Resource.Success -> {
-                        loadingIndicator.visibility = View.INVISIBLE
-                        searchedAdapter.submitList(resource.data)
-                    }
-                    is Resource.Error -> {
-                        loadingIndicator.visibility = View.INVISIBLE
-                        val errorMessage = resource.error
-                        Toast.makeText(requireContext(), errorMessage, Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+    fun refreshSearchedCharacters(){
+        binding.layoutRvSeachedCharacters.setOnRefreshListener {
+            binding.layoutRvSeachedCharacters.isRefreshing = false
+            viewLifecycleOwner.lifecycleScope.launch {
+                viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                    charactersVm.searchResults.collectLatest {result ->
+                        when (result) {
+                            is Resource.Loading -> {
+                                loadingIndicator.visibility = View.VISIBLE
+                            }
+                            is Resource.Success -> {
+                                loadingIndicator.visibility = View.INVISIBLE
+                                searchedAdapter.submitList(result.data)
+                            }
+                            is Resource.Error -> {
+                                loadingIndicator.visibility = View.INVISIBLE
+                                val errorMessage = result.error
+                            }
+                        }
+
                     }
                 }
             }
