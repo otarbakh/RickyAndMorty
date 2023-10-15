@@ -36,7 +36,7 @@ class CharactersFragment :
         setupRecycler()
         setupSearchRecycler()
         getAllCharacters()
-//        getSearchedCharacters()
+        getSearchedCharacters()
         refreshCharacters()
         searchLogic()
 
@@ -153,7 +153,7 @@ class CharactersFragment :
             binding.etSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
                 androidx.appcompat.widget.SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    charactersVm.setSearchQuery(query.orEmpty())
+
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
@@ -176,12 +176,15 @@ class CharactersFragment :
                         }
                     }
                     if (!newText.isNullOrEmpty() && !newText.isBlank() && isNetworkAvailable(requireContext())){
+                        charactersVm.setSearchQuery(newText.orEmpty())
                         binding.rvSearchCharacters.visibility = View.VISIBLE
                         binding.layoutRvSeachedCharacters.visibility = View.VISIBLE
 
                         binding.rvCharacters.visibility = View.INVISIBLE
                         binding.layoutCharacters.visibility = View.INVISIBLE
                         getSearchedCharacters()
+
+
                     }
                     return true
                 }
