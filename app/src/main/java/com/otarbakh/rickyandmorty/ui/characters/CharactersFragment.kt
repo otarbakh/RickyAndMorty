@@ -157,7 +157,7 @@ class CharactersFragment :
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if(newText.isNullOrEmpty() && newText.isNullOrBlank() && !isNetworkAvailable(requireContext())){
+                    if(newText.isNullOrEmpty() && newText.isNullOrBlank() /*&& !isNetworkAvailable(requireContext())*/){
                         search()
                         binding.rvSearchCharacters.visibility = View.INVISIBLE
                         binding.layoutRvSeachedCharacters.visibility = View.INVISIBLE
@@ -173,7 +173,7 @@ class CharactersFragment :
                             }
                         }
                     }
-                    if (!newText.isNullOrEmpty() && !newText.isBlank() && isNetworkAvailable(requireContext())){
+                    if (!newText.isNullOrEmpty() && !newText.isBlank() /*&& !isNetworkAvailable(requireContext())*/){
                         charactersVm.setSearchQuery(newText.orEmpty())
                         binding.rvSearchCharacters.visibility = View.VISIBLE
                         binding.layoutRvSeachedCharacters.visibility = View.VISIBLE
