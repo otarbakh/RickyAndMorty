@@ -1,4 +1,4 @@
-package com.otarbakh.rickyandmorty.data.repository
+package com.otarbakh.rickyandmorty.data.remotemediator
 
 import android.net.Uri
 import android.util.Log
@@ -6,24 +6,23 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.RemoteMediator
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
-import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
+import com.otarbakh.rickyandmorty.data.database.dao.CharactersDao
+import com.otarbakh.rickyandmorty.data.database.dao.EpisodesDao
+import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.model.characters.toCharacter
+import com.otarbakh.rickyandmorty.data.model.episodes.toEpisode
+
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
 
 @OptIn(ExperimentalPagingApi::class)
-class CharactersRemoteMediator(
+class EpisodesRemoteMediator(
     private val apiService: RickyAndMortyService,
-    private val rickyAndMortyDao: RickAndMortyDao,
-) : RemoteMediator<Int, CharactersEntity>() {
-
-
+    private val episodesDao: EpisodesDao,
+) : RemoteMediator<Int, EpisodesEntity>() {
     private var nextPageNumber:Int? = 1
-
-
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, CharactersEntity>,
+        state: PagingState<Int, EpisodesEntity>,
     ): MediatorResult {
         return try {
             val loadKey = when (loadType) {
@@ -34,14 +33,18 @@ class CharactersRemoteMediator(
                 LoadType.APPEND -> nextPageNumber
             }
 
-            val response = apiService.fetchCharacters(loadKey)
 
-            Log.d("kerdzobina",nextPageNumber.toString())
+            val response = apiService.fetchEpisodes(loadKey)
+            if(response.isSuccessful){
+                Log.d("xevsureti",response.body().toString())
+            }else{
+                Log.d("xevsureti","fail")
+            }
 
             val uri = Uri.parse(response.body()!!.info?.next)
             val nextPageQuery = uri.getQueryParameter("page")
 
-            rickyAndMortyDao.insertAllCharacters(response.body()!!.results.map { it.toCharacter() })
+            episodesDao.insertAllEpisodes(response.body()!!.episodesResults.map { it.toEpisode() })
 
             nextPageNumber = nextPageQuery?.toInt()!!
 

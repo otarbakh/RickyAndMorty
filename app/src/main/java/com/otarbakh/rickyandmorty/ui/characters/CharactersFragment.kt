@@ -40,19 +40,11 @@ class CharactersFragment :
         refreshCharacters()
         searchLogic()
 
-
-
-//        if (isNetworkAvailable(requireContext())) {
-//
-//        } else {
-//
-//            Toast.makeText(requireContext(), "No internet connection available", Toast.LENGTH_SHORT).show()
-//        }
     }
 
     override fun listeners() {
         goToDetails()
-
+        goToDetailsFromSearch()
         refreshSearchedCharacters()
     }
 
@@ -79,7 +71,7 @@ class CharactersFragment :
         }
     }
 
-    fun goToDetails() {
+    private fun goToDetails() {
         charactersAdapter.setOnGotoClickListener { charactersEntity, i ->
             findNavController().navigate(
                 CharactersFragmentDirections.actionCharactersFragmentToSingleCharacterFragment(
@@ -89,37 +81,45 @@ class CharactersFragment :
         }
     }
 
-    fun refreshCharacters(){
+    // დავამატე დასერჩილიდან დეტალზე გადასვლა
+    private fun goToDetailsFromSearch() {
+        searchedAdapter.setOnGotoClickListener { charactersEntity, i ->
+            findNavController().navigate(
+                CharactersFragmentDirections.actionCharactersFragmentToSingleCharacterFragment(
+                    charactersEntity.id!!
+                )
+            )
+        }
+    }
+    // დავამატე დასერჩილიდან დეტალზე გადასვლა
+
+    private fun refreshCharacters(){
         binding.layoutCharacters.setOnRefreshListener {
             binding.layoutCharacters.isRefreshing = false
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     charactersVm.getCharacters()
                     charactersVm.state.collectLatest {
-                        if (it != null) {
-                            charactersAdapter.submitData(it)
-                        }
+                        charactersAdapter.submitData(it)
                     }
                 }
             }
         }
     }
-    fun refreshSearchedCharacters(){
+    private fun refreshSearchedCharacters(){
         binding.layoutRvSeachedCharacters.setOnRefreshListener {
             binding.layoutRvSeachedCharacters.isRefreshing = false
             getSearchedCharacters()
         }
     }
 
-    fun getAllCharacters(){
+    private fun getAllCharacters(){
         loadingIndicator = binding.loadingIndicator
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 charactersVm.getCharacters()
                 charactersVm.state.collectLatest {
-                    if (it != null) {
-                        charactersAdapter.submitData(it)
-                    }
+                    charactersAdapter.submitData(it)
                 }
             }
         }
@@ -168,9 +168,7 @@ class CharactersFragment :
                         viewLifecycleOwner.lifecycleScope.launch {
                             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 charactersVm.state.collectLatest {
-                                    if (it != null) {
-                                        charactersAdapter.submitData(it)
-                                    }
+                                    charactersAdapter.submitData(it)
                                 }
                             }
                         }
@@ -197,9 +195,7 @@ class CharactersFragment :
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         charactersVm.state.collectLatest {
-                            if (it != null) {
-                                charactersAdapter.submitData(it)
-                            }
+                            charactersAdapter.submitData(it)
                         }
                     }
                 }

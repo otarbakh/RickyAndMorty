@@ -1,8 +1,8 @@
 package com.otarbakh.rickyandmorty.ui.locations
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.otarbakh.rickyandmorty.common.BaseFragment
 import com.otarbakh.rickyandmorty.databinding.FragmentLocationsBinding
@@ -18,19 +18,11 @@ class LocationsFragment :
     private val locationsVm: LocationsViewModel by viewModels()
     private val locationAdapter: LocationAdapter by lazy { LocationAdapter() }
 
-
     override fun viewCreated() {
         setupRecycler()
-        lifecycleScope.launch {
-            locationsVm.getLocations()
-            locationsVm.state.collectLatest {
-                Log.d("FormulaWarmateba", it.toString())
-                if (it != null) {
-                    locationAdapter.submitData(it)
-                }
-            }
-        }
+        getLocations()
     }
+
     private fun setupRecycler() {
         binding.rvLocations.apply {
             adapter = locationAdapter
@@ -44,8 +36,27 @@ class LocationsFragment :
     }
 
     override fun listeners() {
-
+        goToDetails()
     }
 
+    private fun getLocations() {
+        setupRecycler()
+        lifecycleScope.launch {
+            locationsVm.getLocations()
+            locationsVm.state.collectLatest {
+                locationAdapter.submitData(it)
+            }
+        }
+    }
+
+    private fun goToDetails() {
+        locationAdapter.setOnGotoClickListener { locations, i ->
+            findNavController().navigate(
+                LocationsFragmentDirections.actionLocationsFragmentToSingleLocationFragment(
+                    locations.id!!
+                )
+            )
+        }
+    }
 }
 

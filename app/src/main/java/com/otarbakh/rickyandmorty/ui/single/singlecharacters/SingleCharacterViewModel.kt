@@ -1,4 +1,4 @@
-package com.otarbakh.rickyandmorty.ui.singlecharacters
+package com.otarbakh.rickyandmorty.ui.single.singlecharacters
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

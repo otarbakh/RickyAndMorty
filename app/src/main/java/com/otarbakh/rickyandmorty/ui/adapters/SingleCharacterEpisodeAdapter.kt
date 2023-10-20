@@ -49,26 +49,8 @@ class SingleCharacterEpisodeAdapter :
                 tvSeason.text = data.episode
                 tvEpisodeName.text = data.name
                 tvReleaseDate.text = data.air_date
-
-
-
-
-//                binding.ivNewsImage.setOnClickListener {
-//                    itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
-//                }
-
-//                binding.btnShare.setOnClickListener {
-//                    itemShareClickListener.invoke(data!!, absoluteAdapterPosition)
-//                }
-//
-//                Glide.with(this.)
-//                    .load(data?.image)
-//                    .into(ivNewsImage)
             }
-
         }
-
-
     }
 
 

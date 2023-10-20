@@ -6,6 +6,9 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterInside
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.otarbakh.rickyandmorty.R
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.databinding.SingleCharacterLayoutBinding
 
@@ -43,22 +46,28 @@ class CharactersAdapter :
         fun bind(data: CharactersEntity?) {
 
             binding.apply {
-                tvNewsText.text = data?.name
-                tvDesription.text = data?.gender
+                tvNewsText.text = data!!.name
+                tvDeadOrAlive.text = data!!.status
 
-
+                if(data!!.status == "Dead"){
+                    ivStatus.setImageResource(R.drawable.red_status)
+                }
+                else if (data!!.status == "Alive"){
+                    ivStatus.setImageResource(R.drawable.green_status)
+                }
+                else{
+                    ivStatus.setImageResource(R.drawable.baseline_question_mark_24)
+                }
 
                 binding.ivNewsImage.setOnClickListener {
                     itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
                 }
 
-                binding.btnShare.setOnClickListener {
-                    itemShareClickListener.invoke(data!!, absoluteAdapterPosition)
-                }
-
                 Glide.with(this.ivNewsImage)
                     .load(data?.image)
+                    .transform(CenterInside(), RoundedCorners(24))
                     .into(ivNewsImage)
+
             }
 
         }

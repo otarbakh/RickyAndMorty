@@ -1,4 +1,4 @@
-package com.otarbakh.rickyandmorty.data.repository
+package com.otarbakh.rickyandmorty.data.remotemediator
 
 import android.net.Uri
 import android.util.Log
@@ -6,18 +6,16 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.RemoteMediator
 import androidx.paging.LoadType
 import androidx.paging.PagingState
+import com.otarbakh.rickyandmorty.data.database.dao.CharactersDao
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
-import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
-import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
 import com.otarbakh.rickyandmorty.data.model.characters.toCharacter
-import com.otarbakh.rickyandmorty.data.model.locations.toLocation
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
 
 @OptIn(ExperimentalPagingApi::class)
-class LocationsRemoteMediator(
+class CharactersRemoteMediator(
     private val apiService: RickyAndMortyService,
-    private val rickyAndMortyDao: RickAndMortyDao,
-) : RemoteMediator<Int, LocationsEntity>() {
+    private val charactersDao: CharactersDao,
+) : RemoteMediator<Int, CharactersEntity>() {
 
 
     private var nextPageNumber:Int? = 1
@@ -25,7 +23,7 @@ class LocationsRemoteMediator(
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, LocationsEntity>,
+        state: PagingState<Int, CharactersEntity>,
     ): MediatorResult {
         return try {
             val loadKey = when (loadType) {
@@ -36,14 +34,14 @@ class LocationsRemoteMediator(
                 LoadType.APPEND -> nextPageNumber
             }
 
-            val response = apiService.fetchLocations(loadKey)
+            val response = apiService.fetchCharacters(loadKey)
 
-            Log.d("AmerikisPrezidenti",response.body()!!.results.toString())
+            Log.d("kerdzobina",nextPageNumber.toString())
 
             val uri = Uri.parse(response.body()!!.info?.next)
             val nextPageQuery = uri.getQueryParameter("page")
 
-            rickyAndMortyDao.insertAllLocations(response.body()!!.results.map { it.toLocation() })
+            charactersDao.insertAllCharacters(response.body()!!.results.map { it.toCharacter() })
 
             nextPageNumber = nextPageQuery?.toInt()!!
 

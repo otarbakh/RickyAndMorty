@@ -19,19 +19,43 @@
         android:id="@+id/locationsFragment"
         android:name="com.otarbakh.rickyandmorty.ui.locations.LocationsFragment"
         android:label="fragment_locations"
-        tools:layout="@layout/fragment_locations" />
+        tools:layout="@layout/fragment_locations" >
+        <action
+            android:id="@+id/action_locationsFragment_to_singleLocationFragment"
+            app:destination="@id/singleLocationFragment" />
+    </fragment>
     <fragment
         android:id="@+id/episodesFragment"
         android:name="com.otarbakh.rickyandmorty.ui.episodes.EpisodesFragment"
         android:label="fragment_episodes"
-        tools:layout="@layout/fragment_episodes" />
+        tools:layout="@layout/fragment_episodes" >
+        <action
+            android:id="@+id/action_episodesFragment_to_singleEpisodeFragment"
+            app:destination="@id/singleEpisodeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/singleCharacterFragment"
-        android:name="com.otarbakh.rickyandmorty.ui.singlecharacters.SingleCharacterFragment"
+        android:name="com.otarbakh.rickyandmorty.ui.single.singlecharacters.SingleCharacterFragment"
         android:label="fragment_single_character"
         tools:layout="@layout/fragment_single_character" >
         <argument
             android:name="characterID"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleLocationFragment"
+        android:name="com.otarbakh.rickyandmorty.ui.single.singlelocations.SingleLocationFragment"
+        android:label="SingleLocationFragment" >
+        <argument
+            android:name="LocationId"
+            app:argType="integer" />
+    </fragment>
+    <fragment
+        android:id="@+id/singleEpisodeFragment"
+        android:name="com.otarbakh.rickyandmorty.ui.single.singleEpisodes.SingleEpisodeFragment"
+        android:label="SingleEpisodeFragment" >
+        <argument
+            android:name="episodeId"
             app:argType="integer" />
     </fragment>
 </navigation>

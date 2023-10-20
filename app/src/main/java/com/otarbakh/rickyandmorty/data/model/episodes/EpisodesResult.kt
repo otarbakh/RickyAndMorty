@@ -1,21 +1,28 @@
 package com.otarbakh.rickyandmorty.data.model.episodes
 
 
+import com.google.gson.annotations.SerializedName
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 
-data class Result(
-    val air_date: String?,
-    val characters: List<String?>?,
-    val created: String?,
-    val episode: String?,
-    val id: Int?,
-    val name: String?,
-    val url: String?
+data class EpisodesResult(
+    @SerializedName("air_date")
+    val airDate: String,
+    @SerializedName("characters")
+    val characters: List<String>,
+    @SerializedName("created")
+    val created: String,
+    @SerializedName("episode")
+    val episode: String,
+    @SerializedName("id")
+    val id: Int,
+    @SerializedName("name")
+    val name: String,
+    @SerializedName("url")
+    val url: String
 )
 
-
-fun Result.toEpisodes(): EpisodesEntity {
+fun EpisodesResult.toEpisode(): EpisodesEntity {
     return EpisodesEntity(
-        air_date, id, name,episode,url
+        airDate,id, name, episode, url
     )
 }

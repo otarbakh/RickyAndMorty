@@ -2,5 +2,5 @@ package com.otarbakh.rickyandmorty.data.model.locations
 
 data class LocationsDto(
     val info: Info?,
-    val results: List<LocationsResult>
+    val results: List<LocationsResult> = listOf()
 )

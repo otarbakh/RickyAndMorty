@@ -8,15 +8,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import androidx.paging.filter
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.otarbakh.rickyandmorty.R
 import com.otarbakh.rickyandmorty.common.BaseFragment
+import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.databinding.FragmentEpisodesBinding
 import com.otarbakh.rickyandmorty.ui.adapters.CharactersAdapter
 import com.otarbakh.rickyandmorty.ui.adapters.EpisodesAdapter
 import com.otarbakh.rickyandmorty.ui.characters.CharactersViewModel
+import com.otarbakh.rickyandmorty.ui.locations.LocationsFragmentDirections
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,16 +34,7 @@ class EpisodesFragment : BaseFragment<FragmentEpisodesBinding>(FragmentEpisodesB
     private val episodeAdapter: EpisodesAdapter by lazy { EpisodesAdapter() }
 
     override fun viewCreated() {
-        setupRecycler()
-        lifecycleScope.launch {
-            episodesVm.getEpisodes()
-            episodesVm.state.collectLatest {
-                Log.d("FormulaWarmateba", it.toString())
-                if (it != null) {
-                    episodeAdapter.submitData(it)
-                }
-            }
-        }
+        getEpisodes()
     }
 
     private fun setupRecycler() {
@@ -52,8 +49,27 @@ class EpisodesFragment : BaseFragment<FragmentEpisodesBinding>(FragmentEpisodesB
     }
 
     override fun listeners() {
+        goToDetails()
+    }
+
+    private fun getEpisodes() {
+        setupRecycler()
+        lifecycleScope.launch {
+            episodesVm.getEpisodes()
+            episodesVm.state.collectLatest {
+                episodeAdapter.submitData(it)
+            }
+        }
 
     }
 
-
+    private fun goToDetails() {
+        episodeAdapter.setOnGotoClickListener { episode, i ->
+            findNavController().navigate(
+                EpisodesFragmentDirections.actionEpisodesFragmentToSingleEpisodeFragment(
+                    episode.id!!
+                )
+            )
+        }
+    }
 }

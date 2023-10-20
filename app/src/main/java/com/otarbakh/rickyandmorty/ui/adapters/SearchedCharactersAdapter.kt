@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.otarbakh.rickyandmorty.R
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.model.characters.CharactersResult
 import com.otarbakh.rickyandmorty.databinding.SingleCharacterLayoutBinding
@@ -45,17 +46,20 @@ class SearchedCharactersAdapter :
         fun bind(data: CharactersResult?) {
 
             binding.apply {
-                tvNewsText.text = data?.name
-                tvDesription.text = data?.gender
+                tvNewsText.text = data!!.name
+                tvDeadOrAlive.text = data!!.status
 
-
-
+                if(data!!.status == "Dead"){
+                    ivStatus.setImageResource(R.drawable.red_status)
+                }
+                else if (data!!.status == "Alive"){
+                    ivStatus.setImageResource(R.drawable.green_status)
+                }
+                else{
+                    ivStatus.setImageResource(R.drawable.baseline_question_mark_24)
+                }
                 binding.ivNewsImage.setOnClickListener {
                     itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
-                }
-
-                binding.btnShare.setOnClickListener {
-                    itemShareClickListener.invoke(data!!, absoluteAdapterPosition)
                 }
 
                 Glide.with(this.ivNewsImage)

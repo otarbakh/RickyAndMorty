@@ -1,6 +1,7 @@
 package com.otarbakh.rickyandmorty.data.model.locations
 
 import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
+import com.otarbakh.rickyandmorty.domain.model.LocationsDomain
 
 data class LocationsResult(
     val created: String?,
@@ -11,7 +12,6 @@ data class LocationsResult(
     val type: String?,
     val url: String?
 )
-
 fun LocationsResult.toLocation(): LocationsEntity {
     return LocationsEntity(
         type, id, name

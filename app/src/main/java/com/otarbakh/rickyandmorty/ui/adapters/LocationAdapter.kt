@@ -5,9 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
 import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
-import com.otarbakh.rickyandmorty.databinding.SingleEpisodesLayoutBinding
 import com.otarbakh.rickyandmorty.databinding.SingleLocationBinding
 
 class LocationAdapter :
@@ -16,8 +14,8 @@ class LocationAdapter :
     ) {
 
 
-    private lateinit var itemGotoLinkClickListener: (EpisodesEntity, Int) -> Unit
-    private lateinit var itemShareClickListener: (EpisodesEntity, Int) -> Unit
+    private lateinit var itemGotoLinkClickListener: (LocationsEntity, Int) -> Unit
+    private lateinit var itemShareClickListener: (LocationsEntity, Int) -> Unit
 
     override fun onBindViewHolder(holder: LocationViewHolder, position: Int) {
 
@@ -43,26 +41,21 @@ class LocationAdapter :
         fun bind(data: LocationsEntity?) {
 
             binding.apply {
-                tvName.text = data!!.name
-                tvType.text = data!!.type
-
+                tvlocationName.text = data!!.name
+                tvLocationType.text = data!!.type
             }
-
+            binding.mainLayout.setOnClickListener {
+                itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
+            }
         }
-
-
+    }
+    fun setOnGotoClickListener(clickListener: (LocationsEntity, Int) -> Unit) {
+        itemGotoLinkClickListener = clickListener
     }
 
-//    fun setOnGotoClickListener(clickListener: (LocationsEntity, Int) -> Unit) {
-//        itemGotoLinkClickListener = clickListener
-//    }
-//
-//    fun setOnShareClickListener(clickListener: (LocationsEntity, Int) -> Unit) {
-//        itemShareClickListener = clickListener
-//    }
-
-
-
+    fun setOnShareClickListener(clickListener: (LocationsEntity, Int) -> Unit) {
+        itemShareClickListener = clickListener
+    }
 
     private class LocationDiffCallback : DiffUtil.ItemCallback<LocationsEntity>() {
         override fun areItemsTheSame(oldItem: LocationsEntity, newItem: LocationsEntity): Boolean {

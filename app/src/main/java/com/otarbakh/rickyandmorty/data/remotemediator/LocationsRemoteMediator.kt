@@ -1,31 +1,25 @@
-package com.otarbakh.rickyandmorty.data.repository
+package com.otarbakh.rickyandmorty.data.remotemediator
 
 import android.net.Uri
 import android.util.Log
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.RemoteMediator
 import androidx.paging.LoadType
 import androidx.paging.PagingState
-import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
-import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
-import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
-import com.otarbakh.rickyandmorty.data.model.characters.toCharacter
-import com.otarbakh.rickyandmorty.data.model.episodes.toEpisodes
+import androidx.paging.RemoteMediator
+import com.otarbakh.rickyandmorty.data.database.dao.LocationsDao
+import com.otarbakh.rickyandmorty.data.database.model.LocationsEntity
+import com.otarbakh.rickyandmorty.data.model.locations.toLocation
 import com.otarbakh.rickyandmorty.data.service.RickyAndMortyService
 
 @OptIn(ExperimentalPagingApi::class)
-class EpisodesRemoteMediator(
+class LocationsRemoteMediator(
     private val apiService: RickyAndMortyService,
-    private val rickyAndMortyDao: RickAndMortyDao,
-) : RemoteMediator<Int, EpisodesEntity>() {
-
-
+    private val locationsDao: LocationsDao,
+) : RemoteMediator<Int, LocationsEntity>() {
     private var nextPageNumber:Int? = 1
-
-
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, EpisodesEntity>,
+        state: PagingState<Int, LocationsEntity>,
     ): MediatorResult {
         return try {
             val loadKey = when (loadType) {
@@ -36,14 +30,12 @@ class EpisodesRemoteMediator(
                 LoadType.APPEND -> nextPageNumber
             }
 
-            val response = apiService.fetchEpisodes(loadKey)
-
-            Log.d("kerdzobina",nextPageNumber.toString())
+            val response = apiService.fetchLocations(loadKey)
 
             val uri = Uri.parse(response.body()!!.info?.next)
             val nextPageQuery = uri.getQueryParameter("page")
 
-            rickyAndMortyDao.insertAllEpisodes(response.body()!!.results!!.map { it!!.toEpisodes() })
+            locationsDao.insertAllLocations(response.body()!!.results.map { it.toLocation() })
 
             nextPageNumber = nextPageQuery?.toInt()!!
 
@@ -52,5 +44,4 @@ class EpisodesRemoteMediator(
             MediatorResult.Error(e)
         }
     }
-
 }

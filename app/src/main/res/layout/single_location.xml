@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="150dp">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:background="@drawable/rounded_corners"
+            android:layout_margin="5dp"
+            android:padding="10dp">
 
             <TextView
-                android:id="@+id/tvName"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvLocationType"
+                android:layout_width="match_parent"
+                android:gravity="center|start"
                 android:layout_height="wrap_content"
-                android:text="Season 1"
                 android:layout_weight="1"
-                android:textColor="@color/red"
-                android:textSize="25sp" />
+                android:text="Planet"
+                android:textSize="17sp" />
 
             <TextView
-                android:id="@+id/tvType"
-                android:layout_weight="1"
-                android:layout_width="wrap_content"
+                android:id="@+id/tvlocationName"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Pilot"
-                android:textSize="18sp" />
+                android:gravity="center|start"
+                android:layout_weight="3"
+                android:textStyle="bold"
+                android:text="Planet"
+                android:textSize="20sp" />
+
         </LinearLayout>
+
     </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

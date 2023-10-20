@@ -5,9 +5,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.otarbakh.rickyandmorty.data.database.model.EpisodesEntity
-
 import com.otarbakh.rickyandmorty.databinding.SingleEpisodesLayoutBinding
 
 class EpisodesAdapter :
@@ -15,10 +13,7 @@ class EpisodesAdapter :
         EpisodesDiffCallback()
     ) {
 
-
     private lateinit var itemGotoLinkClickListener: (EpisodesEntity, Int) -> Unit
-    private lateinit var itemShareClickListener: (EpisodesEntity, Int) -> Unit
-
     override fun onBindViewHolder(holder: EpisodesViewHolder, position: Int) {
 
         val data = getItem(position)
@@ -33,7 +28,6 @@ class EpisodesAdapter :
                 LayoutInflater.from(parent.context), parent, false
             )
         )
-
     }
 
     inner class EpisodesViewHolder(
@@ -47,36 +41,16 @@ class EpisodesAdapter :
                 tvEpisodeName.text = data?.name
                 tvReleaseDate.text = data?.air_date
 
-
-
-//                binding.ivNewsImage.setOnClickListener {
-//                    itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
-//                }
-
-//                binding.btnShare.setOnClickListener {
-//                    itemShareClickListener.invoke(data!!, absoluteAdapterPosition)
-//                }
-
-//                Glide.with(this.)
-//                    .load(data?.image)
-//                    .into(ivNewsImage)
+                binding.ivGotoNext.setOnClickListener {
+                    itemGotoLinkClickListener.invoke(data!!, absoluteAdapterPosition)
+                }
             }
-
         }
-
-
     }
 
     fun setOnGotoClickListener(clickListener: (EpisodesEntity, Int) -> Unit) {
         itemGotoLinkClickListener = clickListener
     }
-
-    fun setOnShareClickListener(clickListener: (EpisodesEntity, Int) -> Unit) {
-        itemShareClickListener = clickListener
-    }
-
-
-
 
     private class EpisodesDiffCallback : DiffUtil.ItemCallback<EpisodesEntity>() {
         override fun areItemsTheSame(oldItem: EpisodesEntity, newItem: EpisodesEntity): Boolean {

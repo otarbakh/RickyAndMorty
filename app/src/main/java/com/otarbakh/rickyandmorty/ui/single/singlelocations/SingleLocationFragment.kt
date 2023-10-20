@@ -1,4 +1,4 @@
-package com.otarbakh.rickyandmorty.ui.singlecharacters
+package com.otarbakh.rickyandmorty.ui.single.singlelocations
 
 import android.util.Log
 import androidx.fragment.app.viewModels
@@ -7,23 +7,22 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
-import com.bumptech.glide.Glide
 import com.otarbakh.rickyandmorty.common.BaseFragment
 import com.otarbakh.rickyandmorty.common.Resource
-import com.otarbakh.rickyandmorty.databinding.FragmentSingleCharacterBinding
-import com.otarbakh.rickyandmorty.ui.adapters.SingleCharacterEpisodeAdapter
+import com.otarbakh.rickyandmorty.databinding.FragmentSingleLocationBinding
+import com.otarbakh.rickyandmorty.ui.adapters.SingleLocationCharactersAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SingleCharacterFragment :
-    BaseFragment<FragmentSingleCharacterBinding>(FragmentSingleCharacterBinding::inflate) {
+class SingleLocationFragment :
+    BaseFragment<FragmentSingleLocationBinding>(FragmentSingleLocationBinding::inflate) {
 
-    private val singleCharacterVm: SingleCharacterViewModel by viewModels()
-    private val args: SingleCharacterFragmentArgs by navArgs()
+    private val vm: SingleLocationViewModel by viewModels()
+    private val args: SingleLocationFragmentArgs by navArgs()
     private var characterUrls: List<String> = emptyList()
-    private val singleCharacterAdapter: SingleCharacterEpisodeAdapter by lazy { SingleCharacterEpisodeAdapter() }
+    private val singleCharacterAdapter: SingleLocationCharactersAdapter by lazy { SingleLocationCharactersAdapter() }
 
     override fun viewCreated() {
         observe()
@@ -34,43 +33,36 @@ class SingleCharacterFragment :
 
     private fun observe() {
         setupRecycler()
-        singleCharacterVm.getSingleCharacter(args.characterID)
+        vm.getSingleEpisode(args.LocationId)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                singleCharacterVm.state.collectLatest {
+                vm.state.collectLatest {
                     when (it) {
                         is Resource.Error -> {
-                            Log.d("MISHA", it.error + " erori ")
+
                         }
 
                         is Resource.Loading -> {
-                            Log.d("MISHA", it.loading.toString())
+
                         }
 
                         is Resource.Success -> {
-                         binding.tvCharacterName.text = it.data.name
-                            Glide.with(binding.ivCharacterPhoto)
-                                .load(it.data?.image)
-                                .into(binding.ivCharacterPhoto)
-                            characterUrls = it.data.episode
-                            singleCharacterVm.getMultipleEpisodes(extractIdsFromUrls())
-                            singleCharacterVm.episodesState.collectLatest { episodes ->
-                                when (episodes) {
-                                    is Resource.Error -> {
+                         binding.tvLocationName.text = it.data.name
+                         binding.tvLocationType.text = it.data.type
+                            characterUrls = it.data.residents
+                            vm.getMultipleCharacters(extractIdsFromUrls())
+                            vm.characterState.collectLatest { chars ->
+                                when (chars) {
+                                    is Resource.Error -> {}
 
-                                    }
-
-                                    is Resource.Loading -> {
-                                    }
-
+                                    is Resource.Loading -> {}
 
                                     is Resource.Success -> {
-                                        singleCharacterAdapter.submitList(episodes.data)
+                                        singleCharacterAdapter.submitList(chars.data)
                                     }
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -91,7 +83,7 @@ class SingleCharacterFragment :
     }
 
     private fun setupRecycler() {
-        binding.rvCharactersEpisodes.apply {
+        binding.rvLocationsCharacters.apply {
             adapter = singleCharacterAdapter
             layoutManager = GridLayoutManager(
                 requireContext(),

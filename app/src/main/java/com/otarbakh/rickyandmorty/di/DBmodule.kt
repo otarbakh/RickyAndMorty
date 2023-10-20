@@ -2,8 +2,10 @@ package com.otarbakh.rickyandmorty.di
 
 import android.content.Context
 import androidx.room.Room
-import com.otarbakh.rickyandmorty.data.database.RickAndMortyDao
 import com.otarbakh.rickyandmorty.data.database.RickAndMortyDatabase
+import com.otarbakh.rickyandmorty.data.database.dao.CharactersDao
+import com.otarbakh.rickyandmorty.data.database.dao.EpisodesDao
+import com.otarbakh.rickyandmorty.data.database.dao.LocationsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,8 +29,18 @@ object DBmodule {
 
     @Singleton
     @Provides
-    fun provideTasksDao(db: RickAndMortyDatabase): RickAndMortyDao {
+    fun provideCharsDao(db: RickAndMortyDatabase): CharactersDao {
         return db.charactersDao
+    }
+    @Singleton
+    @Provides
+    fun provideEpsDao(db: RickAndMortyDatabase): EpisodesDao {
+        return db.episodesDao
+    }
+    @Singleton
+    @Provides
+    fun provideLocationsDao(db: RickAndMortyDatabase): LocationsDao {
+        return db.locationsDao
     }
     
 }
