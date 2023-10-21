@@ -41,6 +41,9 @@
         <argument
             android:name="characterID"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_singleCharacterFragment_to_charactersFragment"
+            app:destination="@id/charactersFragment" />
     </fragment>
     <fragment
         android:id="@+id/singleLocationFragment"
@@ -49,6 +52,9 @@
         <argument
             android:name="LocationId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_singleLocationFragment_to_locationsFragment"
+            app:destination="@id/locationsFragment" />
     </fragment>
     <fragment
         android:id="@+id/singleEpisodeFragment"
@@ -57,5 +63,8 @@
         <argument
             android:name="episodeId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_singleEpisodeFragment_to_episodesFragment"
+            app:destination="@id/episodesFragment" />
     </fragment>
 </navigation>

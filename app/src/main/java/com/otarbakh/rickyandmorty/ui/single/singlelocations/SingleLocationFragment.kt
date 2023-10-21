@@ -1,12 +1,13 @@
 package com.otarbakh.rickyandmorty.ui.single.singlelocations
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.otarbakh.rickyandmorty.R
 import com.otarbakh.rickyandmorty.common.BaseFragment
 import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.databinding.FragmentSingleLocationBinding
@@ -29,6 +30,7 @@ class SingleLocationFragment :
     }
 
     override fun listeners() {
+        goBack()
     }
 
     private fun observe() {
@@ -38,13 +40,9 @@ class SingleLocationFragment :
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.state.collectLatest {
                     when (it) {
-                        is Resource.Error -> {
+                        is Resource.Error -> {}
 
-                        }
-
-                        is Resource.Loading -> {
-
-                        }
+                        is Resource.Loading -> {}
 
                         is Resource.Success -> {
                          binding.tvLocationName.text = it.data.name
@@ -66,6 +64,12 @@ class SingleLocationFragment :
                     }
                 }
             }
+        }
+    }
+
+    fun goBack(){
+        binding.ivArrowBack.setOnClickListener{
+            findNavController().navigate(R.id.action_singleLocationFragment_to_locationsFragment)
         }
     }
 

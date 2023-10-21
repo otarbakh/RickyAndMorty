@@ -1,12 +1,13 @@
 package com.otarbakh.rickyandmorty.ui.single.singleEpisodes
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import com.otarbakh.rickyandmorty.R
 import com.otarbakh.rickyandmorty.common.BaseFragment
 import com.otarbakh.rickyandmorty.common.Resource
 import com.otarbakh.rickyandmorty.databinding.FragmentSingleEpisodeBinding
@@ -30,6 +31,7 @@ class SingleEpisodeFragment :
     }
 
     override fun listeners() {
+        goBack()
     }
 
     private fun observe() {
@@ -39,13 +41,9 @@ class SingleEpisodeFragment :
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 vm.state.collectLatest {
                     when (it) {
-                        is Resource.Error -> {
-                            Log.d("MISHA", it.error + " erori ")
-                        }
+                        is Resource.Error -> {}
 
-                        is Resource.Loading -> {
-                            Log.d("MISHA", it.loading.toString())
-                        }
+                        is Resource.Loading -> {}
 
                         is Resource.Success -> {
                             binding.tvEpisodesImpl.text = it.data.name
@@ -56,12 +54,9 @@ class SingleEpisodeFragment :
                             vm.getMultipleCharacters(extractIdsFromUrls())
                             vm.characterState.collectLatest { chars ->
                                 when (chars) {
-                                    is Resource.Error -> {
+                                    is Resource.Error -> {}
 
-                                    }
-
-                                    is Resource.Loading -> {
-                                    }
+                                    is Resource.Loading -> {}
 
                                     is Resource.Success -> {
                                         singleCharacterAdapter.submitList(chars.data)
@@ -75,6 +70,11 @@ class SingleEpisodeFragment :
         }
     }
 
+    fun goBack(){
+        binding.ivArrowBack.setOnClickListener{
+            findNavController().navigate(R.id.action_singleEpisodeFragment_to_episodesFragment)
+        }
+    }
     fun extractIdsFromUrls(): List<Int> {
         return characterUrls.mapNotNull { extractIdFromUrl(it) }
     }

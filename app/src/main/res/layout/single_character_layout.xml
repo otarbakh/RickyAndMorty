@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:layout_margin="10dp"
-    android:background="@color/Bisque"
-    android:layout_height="wrap_content">
+    android:background="@color/Bisque">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:paddingBottom="15dp"
+        android:layout_height="match_parent"
         android:background="@drawable/trasnparent_corners"
-        android:layout_height="match_parent">
+        android:paddingBottom="15dp">
+
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/ivNewsImage"
             android:layout_width="match_parent"
@@ -53,11 +54,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivStatus" />
 
+        <TextView
+            android:id="@+id/tvGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="Male"
+            android:textColor="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@+id/ivStatus"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/ivStatus" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

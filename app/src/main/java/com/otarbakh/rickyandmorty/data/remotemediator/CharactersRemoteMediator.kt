@@ -1,11 +1,10 @@
 package com.otarbakh.rickyandmorty.data.remotemediator
 
 import android.net.Uri
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
-import androidx.paging.RemoteMediator
 import androidx.paging.LoadType
 import androidx.paging.PagingState
+import androidx.paging.RemoteMediator
 import com.otarbakh.rickyandmorty.data.database.dao.CharactersDao
 import com.otarbakh.rickyandmorty.data.database.model.CharactersEntity
 import com.otarbakh.rickyandmorty.data.model.characters.toCharacter
@@ -33,18 +32,11 @@ class CharactersRemoteMediator(
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> nextPageNumber
             }
-
             val response = apiService.fetchCharacters(loadKey)
-
-            Log.d("kerdzobina",nextPageNumber.toString())
-
             val uri = Uri.parse(response.body()!!.info?.next)
             val nextPageQuery = uri.getQueryParameter("page")
-
             charactersDao.insertAllCharacters(response.body()!!.results.map { it.toCharacter() })
-
             nextPageNumber = nextPageQuery?.toInt()!!
-
             MediatorResult.Success(endOfPaginationReached = response.body()!!.info?.next == null)
         } catch (e: Exception) {
             MediatorResult.Error(e)

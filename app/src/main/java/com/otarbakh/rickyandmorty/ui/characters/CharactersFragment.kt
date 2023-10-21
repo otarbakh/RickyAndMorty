@@ -6,7 +6,6 @@ import android.net.NetworkInfo
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.SearchView
-import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -36,15 +35,13 @@ class CharactersFragment :
         setupRecycler()
         setupSearchRecycler()
         getAllCharacters()
-        getSearchedCharacters()
         refreshCharacters()
         searchLogic()
-
     }
 
     override fun listeners() {
         goToDetails()
-        goToDetailsFromSearch()
+        goToDetailsForSearched()
         refreshSearchedCharacters()
     }
 
@@ -71,7 +68,7 @@ class CharactersFragment :
         }
     }
 
-    private fun goToDetails() {
+    fun goToDetails() {
         charactersAdapter.setOnGotoClickListener { charactersEntity, i ->
             findNavController().navigate(
                 CharactersFragmentDirections.actionCharactersFragmentToSingleCharacterFragment(
@@ -81,8 +78,7 @@ class CharactersFragment :
         }
     }
 
-    // დავამატე დასერჩილიდან დეტალზე გადასვლა
-    private fun goToDetailsFromSearch() {
+    fun goToDetailsForSearched() {
         searchedAdapter.setOnGotoClickListener { charactersEntity, i ->
             findNavController().navigate(
                 CharactersFragmentDirections.actionCharactersFragmentToSingleCharacterFragment(
@@ -91,35 +87,36 @@ class CharactersFragment :
             )
         }
     }
-    // დავამატე დასერჩილიდან დეტალზე გადასვლა
 
-    private fun refreshCharacters(){
+    fun refreshCharacters(){
         binding.layoutCharacters.setOnRefreshListener {
             binding.layoutCharacters.isRefreshing = false
             viewLifecycleOwner.lifecycleScope.launch {
                 viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                     charactersVm.getCharacters()
                     charactersVm.state.collectLatest {
-                        charactersAdapter.submitData(it)
+                        charactersAdapter.submitData(it!!)
                     }
                 }
             }
         }
     }
-    private fun refreshSearchedCharacters(){
+    fun refreshSearchedCharacters(){
         binding.layoutRvSeachedCharacters.setOnRefreshListener {
             binding.layoutRvSeachedCharacters.isRefreshing = false
             getSearchedCharacters()
         }
     }
 
-    private fun getAllCharacters(){
+    fun getAllCharacters(){
         loadingIndicator = binding.loadingIndicator
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 charactersVm.getCharacters()
                 charactersVm.state.collectLatest {
-                    charactersAdapter.submitData(it)
+                    if (it != null) {
+                        charactersAdapter.submitData(it)
+                    }
                 }
             }
         }
@@ -139,7 +136,6 @@ class CharactersFragment :
                         }
                         is Resource.Error -> {
                             loadingIndicator.visibility = View.INVISIBLE
-                            val errorMessage = result.error
                         }
                     }
 
@@ -153,11 +149,11 @@ class CharactersFragment :
             binding.etSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
                 androidx.appcompat.widget.SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-
+                    charactersVm.setSearchQuery(query.orEmpty())
                     return true
                 }
                 override fun onQueryTextChange(newText: String?): Boolean {
-                    if(newText.isNullOrEmpty() && newText.isNullOrBlank() /*&& !isNetworkAvailable(requireContext())*/){
+                    if(newText.isNullOrEmpty() && newText.isNullOrBlank() && !isNetworkAvailable(requireContext())){
                         search()
                         binding.rvSearchCharacters.visibility = View.INVISIBLE
                         binding.layoutRvSeachedCharacters.visibility = View.INVISIBLE
@@ -168,21 +164,20 @@ class CharactersFragment :
                         viewLifecycleOwner.lifecycleScope.launch {
                             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                                 charactersVm.state.collectLatest {
-                                    charactersAdapter.submitData(it)
+                                    if (it != null) {
+                                        charactersAdapter.submitData(it)
+                                    }
                                 }
                             }
                         }
                     }
-                    if (!newText.isNullOrEmpty() && !newText.isBlank() /*&& !isNetworkAvailable(requireContext())*/){
-                        charactersVm.setSearchQuery(newText.orEmpty())
+                    if (!newText.isNullOrEmpty() && !newText.isBlank() && isNetworkAvailable(requireContext())){
                         binding.rvSearchCharacters.visibility = View.VISIBLE
                         binding.layoutRvSeachedCharacters.visibility = View.VISIBLE
 
                         binding.rvCharacters.visibility = View.INVISIBLE
                         binding.layoutCharacters.visibility = View.INVISIBLE
                         getSearchedCharacters()
-
-
                     }
                     return true
                 }
@@ -195,7 +190,9 @@ class CharactersFragment :
                 viewLifecycleOwner.lifecycleScope.launch {
                     viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                         charactersVm.state.collectLatest {
-                            charactersAdapter.submitData(it)
+                            if (it != null) {
+                                charactersAdapter.submitData(it)
+                            }
                         }
                     }
                 }

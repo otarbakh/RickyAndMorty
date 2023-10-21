@@ -1,5 +1,6 @@
 package com.otarbakh.rickyandmorty.ui.locations
 
+import android.widget.ProgressBar
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,11 +18,17 @@ class LocationsFragment :
 
     private val locationsVm: LocationsViewModel by viewModels()
     private val locationAdapter: LocationAdapter by lazy { LocationAdapter() }
-
+    private lateinit var loadingIndicator: ProgressBar
     override fun viewCreated() {
         setupRecycler()
         getLocations()
     }
+
+    override fun listeners() {
+        goToDetails()
+        refreshLocations()
+    }
+
 
     private fun setupRecycler() {
         binding.rvLocations.apply {
@@ -35,9 +42,13 @@ class LocationsFragment :
         }
     }
 
-    override fun listeners() {
-        goToDetails()
+    private fun refreshLocations(){
+        binding.rvLocationsSwipe.setOnRefreshListener {
+            binding.rvLocationsSwipe.isRefreshing = false
+            getLocations()
+        }
     }
+
 
     private fun getLocations() {
         setupRecycler()

@@ -1,6 +1,5 @@
 package com.otarbakh.rickyandmorty.ui.single.singlecharacters
 
-import android.util.Log
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -39,13 +38,9 @@ class SingleCharacterFragment :
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 singleCharacterVm.state.collectLatest {
                     when (it) {
-                        is Resource.Error -> {
-                            Log.d("MISHA", it.error + " erori ")
-                        }
+                        is Resource.Error -> {}
 
-                        is Resource.Loading -> {
-                            Log.d("MISHA", it.loading.toString())
-                        }
+                        is Resource.Loading -> {}
 
                         is Resource.Success -> {
                          binding.tvCharacterName.text = it.data.name
@@ -56,13 +51,9 @@ class SingleCharacterFragment :
                             singleCharacterVm.getMultipleEpisodes(extractIdsFromUrls())
                             singleCharacterVm.episodesState.collectLatest { episodes ->
                                 when (episodes) {
-                                    is Resource.Error -> {
+                                    is Resource.Error -> {}
 
-                                    }
-
-                                    is Resource.Loading -> {
-                                    }
-
+                                    is Resource.Loading -> {}
 
                                     is Resource.Success -> {
                                         singleCharacterAdapter.submitList(episodes.data)

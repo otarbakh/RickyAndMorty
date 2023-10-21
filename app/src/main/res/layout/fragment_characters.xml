@@ -37,10 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="3dp"
-            android:background="@color/yellow"
             android:visibility="invisible" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/layoutCharacters"

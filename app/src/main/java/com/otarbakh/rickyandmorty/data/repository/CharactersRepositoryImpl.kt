@@ -25,7 +25,6 @@ class CharactersRepositoryImpl @Inject constructor(
     private val charactersDao: CharactersDao,
 ) : CharactersRepository {
     @OptIn(ExperimentalPagingApi::class)
-    // for all characters
     override suspend fun getCharacters(): Flow<PagingData<CharactersEntity>> {
         val pagingSourceFactory = { charactersDao.getCharacters() }
         return Pager(
@@ -35,7 +34,6 @@ class CharactersRepositoryImpl @Inject constructor(
         ).flow
     }
 
-    // for navigating to details
     override suspend fun getSingleCharacter(id: Int): Flow<Resource<SingleCharacterDto>> = flow {
         emit(Resource.Loading(true))
         val response = rickyAndMortyService.fetchSingleCharacter(id)
@@ -63,7 +61,6 @@ class CharactersRepositoryImpl @Inject constructor(
             emit(Resource.Error(errorMessage))
         }
     }
-    // for searching chars
     override suspend fun getSearchedCharacters(name: String): Flow<Resource<List<CharactersResult>>> =
         flow {
             emit(Resource.Loading(true))
@@ -93,7 +90,6 @@ class CharactersRepositoryImpl @Inject constructor(
             }
         }
 
-    // for episodes list in characters in single character screen
     override suspend fun getMultipleEpisodes(ids: List<Int>): Flow<Resource<MultipleEpisodesDto>> =
         flow {
             emit(Resource.Loading(true))
@@ -101,7 +97,6 @@ class CharactersRepositoryImpl @Inject constructor(
             if (response?.isSuccessful!!) {
                 emit(Resource.Success(response.body()!!))
             } else {
-
                 val errorBody = response?.errorBody()?.string()
                 val errorMessage = if (errorBody != null) {
                     if (response?.headers()?.get("Content-Type")
@@ -122,6 +117,5 @@ class CharactersRepositoryImpl @Inject constructor(
                 emit(Resource.Error(errorMessage))
             }
         }
-
 }
 

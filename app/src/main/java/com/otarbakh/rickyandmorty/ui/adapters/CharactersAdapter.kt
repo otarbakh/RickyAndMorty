@@ -48,6 +48,7 @@ class CharactersAdapter :
             binding.apply {
                 tvNewsText.text = data!!.name
                 tvDeadOrAlive.text = data!!.status
+                tvGender.text = data!!.gender
 
                 if(data!!.status == "Dead"){
                     ivStatus.setImageResource(R.drawable.red_status)
